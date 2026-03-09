@@ -1,0 +1,394 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>ITOS220-T: Operating Systems Project</title>
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
+    
+    <style>
+        /* --- CSS STYLES --- */
+        :root {
+            --primary-color: #2563eb; /* Tech Blue */
+            --bg-dark: #0f172a;
+            --bg-panel: #1e293b;
+            --text-light: #f8fafc;
+            --text-gray: #94a3b8;
+            --accent: #38bdf8;
+        }
+
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+            font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
+        }
+
+        body {
+            background-color: var(--bg-dark);
+            color: var(--text-light);
+            min-height: 100vh;
+            display: flex;
+            flex-direction: column;
+        }
+
+        /* Navbar Styling */
+        nav {
+            background-color: var(--bg-panel);
+            border-bottom: 2px solid var(--primary-color);
+            position: sticky;
+            top: 0;
+            z-index: 100;
+            box-shadow: 0 4px 15px rgba(0,0,0,0.3);
+        }
+
+        .nav-container {
+            max-width: 1400px;
+            margin: 0 auto;
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+        }
+
+        .logo {
+            font-size: 1.5rem;
+            font-weight: bold;
+            padding: 1rem;
+            color: var(--accent);
+            text-transform: uppercase;
+            letter-spacing: 1px;
+        }
+
+        .menu {
+            display: flex;
+            list-style: none;
+        }
+
+        .menu-item {
+            position: relative;
+        }
+
+        .menu-link {
+            display: block;
+            padding: 1.2rem 1.5rem;
+            color: var(--text-light);
+            text-decoration: none;
+            font-weight: 500;
+            transition: all 0.3s;
+            cursor: pointer;
+        }
+
+        .menu-link:hover, .menu-link.active {
+            background-color: var(--primary-color);
+            color: white;
+        }
+
+        /* Dropdown Styling */
+        .dropdown {
+            position: absolute;
+            top: 100%;
+            left: 0;
+            background-color: var(--bg-panel);
+            min-width: 280px;
+            box-shadow: 0 8px 20px rgba(0,0,0,0.5);
+            opacity: 0;
+            visibility: hidden;
+            transform: translateY(10px);
+            transition: all 0.3s ease;
+            border-radius: 0 0 8px 8px;
+            overflow: hidden;
+        }
+
+        .menu-item:hover .dropdown {
+            opacity: 1;
+            visibility: visible;
+            transform: translateY(0);
+        }
+
+        .dropdown a {
+            display: flex;
+            align-items: center;
+            padding: 12px 20px;
+            color: var(--text-gray);
+            text-decoration: none;
+            border-bottom: 1px solid rgba(255,255,255,0.05);
+            font-size: 0.95rem;
+            transition: 0.2s;
+            cursor: pointer;
+        }
+
+        .dropdown a i {
+            margin-right: 12px;
+            width: 20px;
+            text-align: center;
+            color: var(--accent);
+        }
+
+        .dropdown a:hover {
+            background-color: rgba(37, 99, 235, 0.1);
+            color: var(--accent);
+            padding-left: 25px; /* Slide effect */
+        }
+
+        /* Content Area */
+        .main-content {
+            flex: 1;
+            display: flex;
+            flex-direction: column;
+            align-items: center;
+            padding: 40px 20px;
+            width: 100%;
+            max-width: 1200px;
+            margin: 0 auto;
+        }
+
+        /* Video Player Wrapper */
+        .video-wrapper {
+            width: 100%;
+            background: #000;
+            border-radius: 12px;
+            overflow: hidden;
+            box-shadow: 0 0 30px rgba(37, 99, 235, 0.2);
+            margin-bottom: 20px;
+            display: none; /* Hidden by default until a video is clicked */
+        }
+
+        .video-container {
+            position: relative;
+            padding-bottom: 56.25%; /* 16:9 Aspect Ratio */
+            height: 0;
+        }
+
+        .video-container iframe {
+            position: absolute;
+            top: 0;
+            left: 0;
+            width: 100%;
+            height: 100%;
+            border: none;
+        }
+
+        .info-area {
+            text-align: center;
+            max-width: 900px;
+            margin-top: 20px;
+        }
+
+        .section-title {
+            font-size: 2.5rem;
+            margin-bottom: 15px;
+            color: var(--accent);
+        }
+
+        .section-desc {
+            color: var(--text-gray);
+            line-height: 1.8;
+            font-size: 1.1rem;
+            text-align: left;
+            background: var(--bg-panel);
+            padding: 30px;
+            border-radius: 12px;
+            border-left: 4px solid var(--accent);
+        }
+
+        .welcome-box {
+            text-align: center;
+        }
+
+        /* Responsive Fix */
+        @media (max-width: 768px) {
+            .nav-container {
+                flex-direction: column;
+            }
+            .menu {
+                flex-direction: column;
+                width: 100%;
+            }
+            .dropdown {
+                position: static;
+                box-shadow: none;
+                background-color: rgba(0,0,0,0.2);
+                display: none;
+                transform: none;
+            }
+            .menu-item:hover .dropdown {
+                display: block;
+                opacity: 1;
+                visibility: visible;
+            }
+        }
+    </style>
+</head>
+<body onload="showHome()"> <nav>
+        <div class="nav-container">
+            <div class="logo">ITOS220-T FINAL</div>
+            <ul class="menu">
+                <li class="menu-item"><a class="menu-link" onclick="showHome()">HOME</a></li>
+                
+                <li class="menu-item">
+                    <a class="menu-link">LABORATORY ACTIVITIES <i class="fas fa-chevron-down" style="font-size: 0.8em; margin-left:5px;"></i></a>
+                    <div class="dropdown">
+                        <a onclick="playVideo('https://www.youtube.com/embed/VIDEO_ID_HERE', 'Active Directory: Creating Users')">
+                            <i class="fas fa-users"></i> Active Directory: Creating Users
+                        </a>
+                        <a onclick="playVideo('https://www.youtube.com/embed/VIDEO_ID_HERE', 'DHCP Role & Joining Domain')">
+                            <i class="fas fa-network-wired"></i> DHCP Role & Joining Domain
+                        </a>
+                        <a onclick="playVideo('https://www.youtube.com/embed/VIDEO_ID_HERE', 'Application and Web Server')">
+                            <i class="fab fa-chrome"></i> Application and Web Server
+                        </a>
+                        <a onclick="playVideo('https://www.youtube.com/embed/VIDEO_ID_HERE', 'RAID Installation')">
+                            <i class="fas fa-hdd"></i> RAID Installation
+                        </a>
+                        <a onclick="playVideo('https://www.youtube.com/embed/VIDEO_ID_HERE', 'Group Policy Management')">
+                            <i class="fas fa-folder-tree"></i> Group Policy Management
+                        </a>
+                        <a onclick="playVideo('https://www.youtube.com/embed/VIDEO_ID_HERE', 'File Server')">
+                            <i class="fas fa-file-alt"></i> File Server
+                        </a>
+                    </div>
+                </li>
+
+                <li class="menu-item">
+                    <a class="menu-link">WINDOWS INSTALLATION <i class="fas fa-chevron-down" style="font-size: 0.8em; margin-left:5px;"></i></a>
+                    <div class="dropdown" style="max-height: 400px; overflow-y: auto;">
+                        <a onclick="playVideo('https://www.youtube.com/embed/2vkMEcmNXro', 'Windows 95')"><i class="fab fa-windows"></i> Windows 95</a>
+                        <a onclick="playVideo('https://www.youtube.com/embed/VIDEO_ID_HERE', 'Windows 98')"><i class="fab fa-windows"></i> Windows 98</a>
+                        <a onclick="playVideo('https://www.youtube.com/embed/7nxvhMLfyHw', 'Windows NT')"><i class="fab fa-windows"></i> Windows NT</a>
+                        <a onclick="playVideo('https://www.youtube.com/embed/VIDEO_ID_HERE', 'Windows 2000')"><i class="fab fa-windows"></i> Windows 2000</a>
+                        <a onclick="playVideo('https://www.youtube.com/embed/VIDEO_ID_HERE', 'Windows ME')"><i class="fab fa-windows"></i> Windows ME</a>
+                        <a onclick="playVideo('https://www.youtube.com/embed/VIDEO_ID_HERE', 'Windows XP')"><i class="fab fa-windows"></i> Windows XP</a>
+                        <a onclick="playVideo('https://www.youtube.com/embed/VIDEO_ID_HERE', 'Windows Server 2003')"><i class="fas fa-server"></i> Win Server 2003</a>
+                        <a onclick="playVideo('https://www.youtube.com/embed/VIDEO_ID_HERE', 'Windows Vista')"><i class="fab fa-windows"></i> Windows Vista</a>
+                        <a onclick="playVideo('https://www.youtube.com/embed/VIDEO_ID_HERE', 'Windows Server 2008')"><i class="fas fa-server"></i> Win Server 2008</a>
+                        <a onclick="playVideo('https://www.youtube.com/embed/VIDEO_ID_HERE', 'Windows 7')"><i class="fab fa-windows"></i> Windows 7</a>
+                        <a onclick="playVideo('https://www.youtube.com/embed/VIDEO_ID_HERE', 'Windows 8')"><i class="fab fa-windows"></i> Windows 8</a>
+                        <a onclick="playVideo('https://www.youtube.com/embed/VIDEO_ID_HERE', 'Windows 10')"><i class="fab fa-windows"></i> Windows 10</a>
+                        <a onclick="playVideo('https://www.youtube.com/embed/VIDEO_ID_HERE', 'Windows 11')"><i class="fab fa-windows"></i> Windows 11</a>
+                    </div>
+                </li>
+
+                <li class="menu-item">
+                    <a class="menu-link">FINALS: TUP-TAGUIG <i class="fas fa-chevron-down" style="font-size: 0.8em; margin-left:5px;"></i></a>
+                    <div class="dropdown">
+                        <a onclick="playVideo('https://www.youtube.com/embed/VIDEO_ID_HERE', 'Part 1: Domain Controller')">
+                            <i class="fas fa-globe"></i> Part 1: Domain Controller
+                        </a>
+                        <a onclick="playVideo('https://www.youtube.com/embed/VIDEO_ID_HERE', 'Part 2: Adding Users')">
+                            <i class="fas fa-user-plus"></i> Part 2: Adding Users
+                        </a>
+                        <a onclick="playVideo('https://www.youtube.com/embed/VIDEO_ID_HERE', 'Part 3: DHCP Server')">
+                            <i class="fas fa-database"></i> Part 3: DHCP Server
+                        </a>
+                        <a onclick="playVideo('https://www.youtube.com/embed/VIDEO_ID_HERE', 'Part 4: File Sharing')">
+                            <i class="fas fa-copy"></i> Part 4: File Sharing
+                        </a>
+                        <a onclick="playVideo('https://www.youtube.com/embed/VIDEO_ID_HERE', 'Part 5: RAID')">
+                            <i class="fas fa-save"></i> Part 5: RAID
+                        </a>
+                        <a onclick="playVideo('https://www.youtube.com/embed/VIDEO_ID_HERE', 'Part 6: Remote Desktop')">
+                            <i class="fas fa-desktop"></i> Part 6: Remote Desktop
+                        </a>
+                        <a onclick="playVideo('https://www.youtube.com/embed/VIDEO_ID_HERE', 'Part 7: Web Server')">
+                            <i class="fas fa-globe-americas"></i> Part 7: Web Server
+                        </a>
+                        <a onclick="playVideo('https://www.youtube.com/embed/VIDEO_ID_HERE', 'Part 8: Group Policies')">
+                            <i class="fas fa-user-cog"></i> Part 8: Group Policies
+                        </a>
+                        <a onclick="playVideo('https://www.youtube.com/embed/VIDEO_ID_HERE', 'Part 9: Windows Deployment')">
+                            <i class="fas fa-cogs"></i> Part 9: Windows Deployment
+                        </a>
+                    </div>
+                </li>
+
+                <li class="menu-item"><a class="menu-link" onclick="showAbout()">ABOUT</a></li>
+            </ul>
+        </div>
+    </nav>
+
+    <div class="main-content">
+        
+        <div id="videoWrapper" class="video-wrapper">
+            <div class="video-container">
+                <iframe id="mainPlayer" src="about:blank" allowfullscreen></iframe>
+            </div>
+        </div>
+
+        <div class="info-area">
+            <h1 id="pageTitle" class="section-title">Loading...</h1>
+            <div id="pageDesc" class="section-desc">
+                </div>
+        </div>
+
+    </div>
+
+    <script>
+        // 1. Function to Play Video
+        function playVideo(url, title) {
+            // Show Video Player
+            document.getElementById('videoWrapper').style.display = 'block';
+            
+            // Set Video Source
+            document.getElementById('mainPlayer').src = url;
+            
+            // Update Title and remove the big description box styling for the video mode
+            document.getElementById('pageTitle').textContent = title;
+            document.getElementById('pageDesc').style.display = 'none'; // Hide text box when video is playing
+
+            // Scroll to top
+            window.scrollTo({ top: 0, behavior: 'smooth' });
+        }
+
+        // 2. Function for HOME Page (Description Only)
+        function showHome() {
+            // Hide Video Player
+            document.getElementById('videoWrapper').style.display = 'none';
+            document.getElementById('mainPlayer').src = "about:blank"; // Stop video sound if playing
+
+            // Show Text Box
+            document.getElementById('pageDesc').style.display = 'block';
+            document.getElementById('pageDesc').className = 'section-desc welcome-box'; // Center align for home
+
+            // Set Content
+            document.getElementById('pageTitle').textContent = "OPERATING SYSTEMS";
+            document.getElementById('pageDesc').innerHTML = `
+                <p style="margin-bottom: 15px;">
+                    An operating system (OS) is the core software that manages a computer's hardware and software resources, 
+                    enabling users to interact with the machine. It handles tasks like running applications, managing memory, 
+                    organizing files, controlling devices, and ensuring security.
+                </p>
+                <p>
+                    <i class="fas fa-arrow-up"></i> <strong>Use the navigation menu above</strong> to access laboratory activities, 
+                    Windows installation guides, and the final TUP-Taguig domain project tutorials.
+                </p>
+            `;
+        }
+
+        // 3. Function for ABOUT Page (Description Only)
+        function showAbout() {
+            // Hide Video Player
+            document.getElementById('videoWrapper').style.display = 'none';
+            document.getElementById('mainPlayer').src = "about:blank";
+
+            // Show Text Box
+            document.getElementById('pageDesc').style.display = 'block';
+            document.getElementById('pageDesc').className = 'section-desc'; // Left align for About
+
+            // Set Content
+            document.getElementById('pageTitle').textContent = "About This Project";
+            document.getElementById('pageDesc').innerHTML = `
+                <p><strong>Course:</strong> ITOS220-T Operating Systems</p>
+                <p><strong>Project Type:</strong> Final Project Compilation</p>
+                <br>
+                <p>
+                    This website serves as a comprehensive portfolio demonstrating practical knowledge in Operating Systems administration. 
+                    It covers the installation of legacy and modern Windows systems, server management, and advanced domain controller configurations.
+                </p>
+                <br>
+                <p><strong>Created by:</strong> [Your Name Here]</p>
+                <p><strong>Institution:</strong> Technological University of the Philippines - Taguig</p>
+            `;
+        }
+    </script>
+</body>
+</html>
