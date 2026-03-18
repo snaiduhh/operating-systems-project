@@ -3,43 +3,58 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>ITOS220-T: Operating Systems Project</title>
+ <title>ITOS220-T Project - Ralph Snider Ordonez (BSIT-NS-2A)</title>
+    
     <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
+    <link href="https://fonts.googleapis.com/css2?family=Poppins:wght@300;400;500;600;700&display=swap" rel="stylesheet">
     
     <style>
-        /* --- CSS STYLES --- */
+        /* --- MODERN CSS STYLES --- */
         :root {
-            --primary-color: #2563eb; /* Tech Blue */
-            --bg-dark: #0f172a;
-            --bg-panel: #1e293b;
+            --primary-color: #38bdf8;
+            --primary-hover: #0284c7;
             --text-light: #f8fafc;
-            --text-gray: #94a3b8;
-            --accent: #38bdf8;
+            --text-gray: #cbd5e1;
+            --glass-bg: rgba(15, 23, 42, 0.65);
+            --glass-border: rgba(255, 255, 255, 0.1);
+            --glass-shadow: 0 8px 32px 0 rgba(0, 0, 0, 0.37);
         }
 
         * {
             margin: 0;
             padding: 0;
             box-sizing: border-box;
-            font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
+            font-family: 'Poppins', sans-serif;
         }
 
+        /* Animated Gradient Background */
         body {
-            background-color: var(--bg-dark);
+            background: linear-gradient(-45deg, #0f172a, #1e1b4b, #0f766e, #172554);
+            background-size: 400% 400%;
+            animation: gradientBG 15s ease infinite;
             color: var(--text-light);
             min-height: 100vh;
             display: flex;
             flex-direction: column;
+            overflow-x: hidden;
         }
 
-        /* Navbar Styling */
+        @keyframes gradientBG {
+            0% { background-position: 0% 50%; }
+            50% { background-position: 100% 50%; }
+            100% { background-position: 0% 50%; }
+        }
+
+        /* Glassmorphic Navbar */
         nav {
-            background-color: var(--bg-panel);
-            border-bottom: 2px solid var(--primary-color);
+            background: var(--glass-bg);
+            backdrop-filter: blur(12px);
+            -webkit-backdrop-filter: blur(12px);
+            border-bottom: 1px solid var(--glass-border);
             position: sticky;
             top: 0;
             z-index: 100;
-            box-shadow: 0 4px 15px rgba(0,0,0,0.3);
+            box-shadow: var(--glass-shadow);
         }
 
         .nav-container {
@@ -48,15 +63,24 @@
             display: flex;
             justify-content: space-between;
             align-items: center;
+            padding: 0 1rem;
         }
 
         .logo {
-            font-size: 1.5rem;
-            font-weight: bold;
+            font-size: 1.6rem;
+            font-weight: 700;
             padding: 1rem;
-            color: var(--accent);
+            background: linear-gradient(to right, #38bdf8, #818cf8);
+            -webkit-background-clip: text;
+            -webkit-text-fill-color: transparent;
             text-transform: uppercase;
-            letter-spacing: 1px;
+            letter-spacing: 2px;
+            cursor: pointer;
+            transition: transform 0.3s ease;
+        }
+
+        .logo:hover {
+            transform: scale(1.05);
         }
 
         .menu {
@@ -70,32 +94,65 @@
 
         .menu-link {
             display: block;
-            padding: 1.2rem 1.5rem;
+            padding: 1.5rem 1.2rem;
             color: var(--text-light);
             text-decoration: none;
             font-weight: 500;
-            transition: all 0.3s;
+            font-size: 0.95rem;
+            letter-spacing: 0.5px;
+            transition: all 0.3s ease;
             cursor: pointer;
+            position: relative;
         }
 
-        .menu-link:hover, .menu-link.active {
+        /* Animated Underline on Hover */
+        .menu-link::after {
+            content: '';
+            position: absolute;
+            width: 0;
+            height: 3px;
+            bottom: 0;
+            left: 50%;
             background-color: var(--primary-color);
-            color: white;
+            transition: all 0.3s ease;
+            transform: translateX(-50%);
+            border-radius: 3px 3px 0 0;
+            box-shadow: 0 -2px 10px var(--primary-color);
         }
 
-        /* Dropdown Styling */
+        .menu-link:hover::after {
+            width: 80%;
+        }
+
+        .menu-link:hover {
+            color: var(--primary-color);
+        }
+
+        .menu-item i {
+            transition: transform 0.3s ease;
+        }
+
+        .menu-item:hover > .menu-link i {
+            transform: rotate(180deg);
+        }
+
+        /* Glassmorphic Dropdown */
         .dropdown {
             position: absolute;
             top: 100%;
             left: 0;
-            background-color: var(--bg-panel);
-            min-width: 280px;
-            box-shadow: 0 8px 20px rgba(0,0,0,0.5);
+            background: rgba(15, 23, 42, 0.85);
+            backdrop-filter: blur(16px);
+            -webkit-backdrop-filter: blur(16px);
+            min-width: 300px;
+            box-shadow: var(--glass-shadow);
+            border: 1px solid var(--glass-border);
+            border-top: none;
             opacity: 0;
             visibility: hidden;
-            transform: translateY(10px);
-            transition: all 0.3s ease;
-            border-radius: 0 0 8px 8px;
+            transform: translateY(15px);
+            transition: all 0.4s cubic-bezier(0.175, 0.885, 0.32, 1.275);
+            border-radius: 0 0 12px 12px;
             overflow: hidden;
         }
 
@@ -105,52 +162,98 @@
             transform: translateY(0);
         }
 
+        /* Custom Scrollbar for Dropdowns */
+        .dropdown::-webkit-scrollbar {
+            width: 6px;
+        }
+        .dropdown::-webkit-scrollbar-track {
+            background: rgba(255,255,255,0.02);
+        }
+        .dropdown::-webkit-scrollbar-thumb {
+            background: rgba(255,255,255,0.2);
+            border-radius: 10px;
+        }
+        .dropdown::-webkit-scrollbar-thumb:hover {
+            background: var(--primary-color);
+        }
+
         .dropdown a {
             display: flex;
             align-items: center;
-            padding: 12px 20px;
+            padding: 14px 22px;
             color: var(--text-gray);
             text-decoration: none;
-            border-bottom: 1px solid rgba(255,255,255,0.05);
+            border-bottom: 1px solid rgba(255,255,255,0.03);
             font-size: 0.95rem;
-            transition: 0.2s;
+            transition: all 0.3s ease;
             cursor: pointer;
+            position: relative;
+            z-index: 1;
+        }
+
+        .dropdown a::before {
+            content: '';
+            position: absolute;
+            top: 0; left: 0; width: 0; height: 100%;
+            background: linear-gradient(90deg, rgba(56, 189, 248, 0.1) 0%, transparent 100%);
+            z-index: -1;
+            transition: width 0.3s ease;
         }
 
         .dropdown a i {
-            margin-right: 12px;
-            width: 20px;
+            margin-right: 15px;
+            width: 24px;
             text-align: center;
-            color: var(--accent);
+            color: var(--primary-color);
+            font-size: 1.1rem;
+            transition: transform 0.3s ease;
         }
 
         .dropdown a:hover {
-            background-color: rgba(37, 99, 235, 0.1);
-            color: var(--accent);
-            padding-left: 25px; /* Slide effect */
+            color: #fff;
+            padding-left: 30px;
         }
 
-        /* Content Area */
+        .dropdown a:hover::before {
+            width: 100%;
+        }
+
+        .dropdown a:hover i {
+            transform: scale(1.2);
+            color: #fff;
+            text-shadow: 0 0 8px var(--primary-color);
+        }
+
+        /* Content Area & Animations */
         .main-content {
             flex: 1;
             display: flex;
             flex-direction: column;
             align-items: center;
-            padding: 40px 20px;
+            padding: 50px 20px;
             width: 100%;
             max-width: 1200px;
             margin: 0 auto;
+            animation: fadeInUp 0.8s ease-out forwards;
         }
 
-        /* Video Player Wrapper */
+        @keyframes fadeInUp {
+            from { opacity: 0; transform: translateY(30px); }
+            to { opacity: 1; transform: translateY(0); }
+        }
+
+        /* Glassmorphic Video Player Wrapper */
         .video-wrapper {
             width: 100%;
-            background: #000;
-            border-radius: 12px;
+            background: rgba(0, 0, 0, 0.4);
+            backdrop-filter: blur(10px);
+            border: 1px solid var(--glass-border);
+            border-radius: 16px;
             overflow: hidden;
-            box-shadow: 0 0 30px rgba(37, 99, 235, 0.2);
-            margin-bottom: 20px;
-            display: none; /* Hidden by default until a video is clicked */
+            box-shadow: 0 15px 35px rgba(0,0,0,0.5), 0 0 20px rgba(56, 189, 248, 0.2);
+            margin-bottom: 30px;
+            display: none;
+            transition: all 0.5s ease;
         }
 
         .video-container {
@@ -168,79 +271,111 @@
             border: none;
         }
 
+        /* Information Area Styling */
         .info-area {
             text-align: center;
             max-width: 900px;
-            margin-top: 20px;
+            width: 100%;
         }
 
         .section-title {
-            font-size: 2.5rem;
-            margin-bottom: 15px;
-            color: var(--accent);
+            font-size: 2.8rem;
+            font-weight: 700;
+            margin-bottom: 20px;
+            background: linear-gradient(to right, #fff, #94a3b8);
+            -webkit-background-clip: text;
+            -webkit-text-fill-color: transparent;
+            text-shadow: 0 4px 20px rgba(0,0,0,0.3);
         }
 
+        /* Glassmorphic Description Box */
         .section-desc {
             color: var(--text-gray);
             line-height: 1.8;
             font-size: 1.1rem;
             text-align: left;
-            background: var(--bg-panel);
-            padding: 30px;
-            border-radius: 12px;
-            border-left: 4px solid var(--accent);
+            background: var(--glass-bg);
+            backdrop-filter: blur(12px);
+            -webkit-backdrop-filter: blur(12px);
+            padding: 40px;
+            border-radius: 16px;
+            border: 1px solid var(--glass-border);
+            border-left: 5px solid var(--primary-color);
+            box-shadow: var(--glass-shadow);
+            transition: all 0.3s ease;
+        }
+
+        .section-desc:hover {
+            box-shadow: 0 12px 40px 0 rgba(0, 0, 0, 0.45);
+            border-left: 5px solid #60a5fa;
         }
 
         .welcome-box {
             text-align: center;
+            border-left: 1px solid var(--glass-border);
+            border-top: 5px solid var(--primary-color);
         }
 
-        /* Responsive Fix */
-        @media (max-width: 768px) {
+        /* Responsive Design */
+        @media (max-width: 992px) {
             .nav-container {
                 flex-direction: column;
+                padding: 10px;
             }
             .menu {
-                flex-direction: column;
-                width: 100%;
+                flex-wrap: wrap;
+                justify-content: center;
+            }
+            .menu-link {
+                padding: 1rem;
             }
             .dropdown {
                 position: static;
                 box-shadow: none;
-                background-color: rgba(0,0,0,0.2);
+                background: rgba(0,0,0,0.2);
                 display: none;
                 transform: none;
+                width: 100%;
+                border-radius: 8px;
+                border: none;
+                margin-top: 5px;
             }
             .menu-item:hover .dropdown {
                 display: block;
                 opacity: 1;
                 visibility: visible;
             }
+            .section-title { font-size: 2rem; }
         }
     </style>
 </head>
-<body onload="showHome()"> <nav>
+<body onload="showHome()"> 
+
+    <nav>
         <div class="nav-container">
-            <div class="logo">ITOS220-T FINAL</div>
+            <div class="logo" onclick="showHome()" style="display: flex; flex-direction: column; line-height: 1.2;">
+    ITOS220-T FINAL
+    <span style="font-size: 0.45em; font-weight: 400; color: var(--text-gray); letter-spacing: 1px; text-transform: none;">Ralph Snider Ordonez | BSIT-NS-2A</span>
+</div>
             <ul class="menu">
                 <li class="menu-item"><a class="menu-link" onclick="showHome()">HOME</a></li>
                 
                 <li class="menu-item">
                     <a class="menu-link">LABORATORY ACTIVITIES <i class="fas fa-chevron-down" style="font-size: 0.8em; margin-left:5px;"></i></a>
                     <div class="dropdown">
-                        <a onclick="playVideo('https://www.youtube.com/embed/VIDEO_ID_HERE', 'Active Directory: Creating Users')">
+                        <a onclick="playVideo('https://www.youtube.com/embed/PnBlhy8djA4', 'Active Directory: Creating Users')">
                             <i class="fas fa-users"></i> Active Directory: Creating Users
                         </a>
-                        <a onclick="playVideo('https://www.youtube.com/embed/VIDEO_ID_HERE', 'DHCP Role & Joining Domain')">
+                        <a onclick="playVideo('https://www.youtube.com/embed//yfbAtnF337M', 'DHCP Role & Joining Domain')">
                             <i class="fas fa-network-wired"></i> DHCP Role & Joining Domain
                         </a>
-                        <a onclick="playVideo('https://www.youtube.com/embed/VIDEO_ID_HERE', 'Application and Web Server')">
+                        <a onclick="playVideo('https://www.youtube.com/embed/fuBBTyioMSQ', 'Application and Web Server')">
                             <i class="fab fa-chrome"></i> Application and Web Server
                         </a>
-                        <a onclick="playVideo('https://www.youtube.com/embed/VIDEO_ID_HERE', 'RAID Installation')">
+                        <a onclick="playVideo('https://www.youtube.com/embed/yiOBaDLYjm4', 'RAID Installation')">
                             <i class="fas fa-hdd"></i> RAID Installation
                         </a>
-                        <a onclick="playVideo('https://www.youtube.com/embed/VIDEO_ID_HERE', 'Group Policy Management')">
+                        <a onclick="playVideo('https://www.youtube.com/embed/GTm6t4V0Djo', 'Group Policy Management')">
                             <i class="fas fa-folder-tree"></i> Group Policy Management
                         </a>
                         <a onclick="playVideo('https://www.youtube.com/embed/VIDEO_ID_HERE', 'File Server')">
@@ -252,7 +387,7 @@
                 <li class="menu-item">
                     <a class="menu-link">WINDOWS INSTALLATION <i class="fas fa-chevron-down" style="font-size: 0.8em; margin-left:5px;"></i></a>
                     <div class="dropdown" style="max-height: 400px; overflow-y: auto;">
-                        <a onclick="playVideo('https://www.youtube.com/embed/2vkMEcmNXro', 'Windows 95')"><i class="fab fa-windows"></i> Windows 95</a>
+                        <a onclick="playVideo('https://www.youtube.com/embed/jkBu5nsQFIA', 'Windows 95')"><i class="fab fa-windows"></i> Windows 95</a>
                         <a onclick="playVideo('https://www.youtube.com/embed/oQ_ivTAePzw', 'Windows 98')"><i class="fab fa-windows"></i> Windows 98</a>
                         <a onclick="playVideo('https://www.youtube.com/embed/7nxvhMLfyHw', 'Windows NT')"><i class="fab fa-windows"></i> Windows NT</a>
                         <a onclick="playVideo('https://www.youtube.com/embed/qj9hQ407n9w', 'Windows 2000')"><i class="fab fa-windows"></i> Windows 2000</a>
@@ -264,38 +399,38 @@
                         <a onclick="playVideo('https://www.youtube.com/embed/DG1cZBmXFQs', 'Windows 7')"><i class="fab fa-windows"></i> Windows 7</a>
                         <a onclick="playVideo('https://www.youtube.com/embed/pjnkCVE33Jk', 'Windows 8')"><i class="fab fa-windows"></i> Windows 8</a>
                         <a onclick="playVideo('https://www.youtube.com/embed/i7WpiZibZOs', 'Windows 10')"><i class="fab fa-windows"></i> Windows 10</a>
-                        <a onclick="playVideo('https://www.youtube.com/embed/VIDEO_ID_HERE', 'Windows 11')"><i class="fab fa-windows"></i> Windows 11</a>
+                        <a onclick="playVideo('https://www.youtube.com/embed/mnsHQkyktjk', 'Windows 11')"><i class="fab fa-windows"></i> Windows 11</a>
                     </div>
                 </li>
 
                 <li class="menu-item">
                     <a class="menu-link">FINALS: TUP-TAGUIG <i class="fas fa-chevron-down" style="font-size: 0.8em; margin-left:5px;"></i></a>
                     <div class="dropdown">
-                        <a onclick="playVideo('https://www.youtube.com/embed/VIDEO_ID_HERE', 'Part 1: Domain Controller')">
+                        <a onclick="playVideo('https://www.youtube.com/embed/4IvE5jDNsSc', 'Part 1: Domain Controller')">
                             <i class="fas fa-globe"></i> Part 1: Domain Controller
                         </a>
-                        <a onclick="playVideo('https://www.youtube.com/embed/VIDEO_ID_HERE', 'Part 2: Adding Users')">
+                        <a onclick="playVideo('https://www.youtube.com/embed/1kCxiTGl3YY', 'Part 2: Adding Users')">
                             <i class="fas fa-user-plus"></i> Part 2: Adding Users
                         </a>
-                        <a onclick="playVideo('https://www.youtube.com/embed/VIDEO_ID_HERE', 'Part 3: DHCP Server')">
+                        <a onclick="playVideo('https://www.youtube.com/embed/H8OPIwtQGZo', 'Part 3: DHCP Server')">
                             <i class="fas fa-database"></i> Part 3: DHCP Server
                         </a>
-                        <a onclick="playVideo('https://www.youtube.com/embed/VIDEO_ID_HERE', 'Part 4: File Sharing')">
+                        <a onclick="playVideo('https://www.youtube.com/embed/QuDkHJASE60', 'Part 4: File Sharing')">
                             <i class="fas fa-copy"></i> Part 4: File Sharing
                         </a>
-                        <a onclick="playVideo('https://www.youtube.com/embed/VIDEO_ID_HERE', 'Part 5: RAID')">
+                        <a onclick="playVideo('https://www.youtube.com/embed/oDZXD75eL18', 'Part 5: RAID')">
                             <i class="fas fa-save"></i> Part 5: RAID
                         </a>
-                        <a onclick="playVideo('https://www.youtube.com/embed/VIDEO_ID_HERE', 'Part 6: Remote Desktop')">
+                        <a onclick="playVideo('https://www.youtube.com/embed/2oQtouLz_k', 'Part 6: Remote Desktop')">
                             <i class="fas fa-desktop"></i> Part 6: Remote Desktop
                         </a>
-                        <a onclick="playVideo('https://www.youtube.com/embed/VIDEO_ID_HERE', 'Part 7: Web Server')">
+                        <a onclick="playVideo('https://www.youtube.com/embed/9byBbclwPn8', 'Part 7: Web Server')">
                             <i class="fas fa-globe-americas"></i> Part 7: Web Server
                         </a>
-                        <a onclick="playVideo('https://www.youtube.com/embed/VIDEO_ID_HERE', 'Part 8: Group Policies')">
+                        <a onclick="playVideo('https://www.youtube.com/embed/d9XpdBom4No', 'Part 8: Group Policies')">
                             <i class="fas fa-user-cog"></i> Part 8: Group Policies
                         </a>
-                        <a onclick="playVideo('https://www.youtube.com/embed/VIDEO_ID_HERE', 'Part 9: Windows Deployment')">
+                        <a onclick="playVideo('https://www.youtube.com/embed/ET2kMNYCiTk', 'Part 9: Windows Deployment')">
                             <i class="fas fa-cogs"></i> Part 9: Windows Deployment
                         </a>
                     </div>
@@ -306,7 +441,7 @@
         </div>
     </nav>
 
-    <div class="main-content">
+    <div class="main-content" id="mainContentArea">
         
         <div id="videoWrapper" class="video-wrapper">
             <div class="video-container">
@@ -323,8 +458,18 @@
     </div>
 
     <script>
+        // Helper function to re-trigger the fade-in animation
+        function triggerAnimation() {
+            const content = document.getElementById('mainContentArea');
+            content.style.animation = 'none';
+            content.offsetHeight; /* trigger reflow */
+            content.style.animation = null; 
+        }
+
         // 1. Function to Play Video
         function playVideo(url, title) {
+            triggerAnimation();
+            
             // Show Video Player
             document.getElementById('videoWrapper').style.display = 'block';
             
@@ -341,6 +486,8 @@
 
         // 2. Function for HOME Page (Description Only)
         function showHome() {
+            triggerAnimation();
+
             // Hide Video Player
             document.getElementById('videoWrapper').style.display = 'none';
             document.getElementById('mainPlayer').src = "about:blank"; // Stop video sound if playing
@@ -350,15 +497,16 @@
             document.getElementById('pageDesc').className = 'section-desc welcome-box'; // Center align for home
 
             // Set Content
-            document.getElementById('pageTitle').textContent = "OPERATING SYSTEMS";
+          document.getElementById('pageTitle').innerHTML = "OPERATING SYSTEMS <br><span style='font-size: 0.35em; color: var(--text-gray); font-weight: 400; letter-spacing: 2px;'>Ralph Snider Ordonez | BSIT-NS-2A</span>";
             document.getElementById('pageDesc').innerHTML = `
-                <p style="margin-bottom: 15px;">
+                <p style="margin-bottom: 20px; font-size: 1.15rem;">
                     An operating system (OS) is the core software that manages a computer's hardware and software resources, 
                     enabling users to interact with the machine. It handles tasks like running applications, managing memory, 
                     organizing files, controlling devices, and ensuring security.
                 </p>
-                <p>
-                    <i class="fas fa-arrow-up"></i> <strong>Use the navigation menu above</strong> to access laboratory activities, 
+                <p style="color: var(--primary-color); font-weight: 500;">
+                    <i class="fas fa-mouse-pointer" style="margin-right: 8px;"></i> 
+                    Use the navigation menu above to access laboratory activities, 
                     Windows installation guides, and the final TUP-Taguig domain project tutorials.
                 </p>
             `;
@@ -366,6 +514,8 @@
 
         // 3. Function for ABOUT Page (Description Only)
         function showAbout() {
+            triggerAnimation();
+
             // Hide Video Player
             document.getElementById('videoWrapper').style.display = 'none';
             document.getElementById('mainPlayer').src = "about:blank";
@@ -377,16 +527,20 @@
             // Set Content
             document.getElementById('pageTitle').textContent = "About This Project";
             document.getElementById('pageDesc').innerHTML = `
-                <p><strong>Course:</strong> ITOS220-T Operating Systems</p>
-                <p><strong>Project Type:</strong> Final Project Compilation</p>
-                <br>
-                <p>
+                <div style="display: grid; gap: 10px;">
+                    <p><i class="fas fa-book" style="color: var(--primary-color); width: 25px;"></i> <strong>Course:</strong> ITOS220-T Operating Systems</p>
+                    <p><i class="fas fa-project-diagram" style="color: var(--primary-color); width: 25px;"></i> <strong>Project Type:</strong> Final Project Compilation</p>
+                </div>
+                <hr style="border: 0; height: 1px; background: var(--glass-border); margin: 25px 0;">
+                <p style="font-size: 1.05rem;">
                     This website serves as a comprehensive portfolio demonstrating practical knowledge in Operating Systems administration. 
                     It covers the installation of legacy and modern Windows systems, server management, and advanced domain controller configurations.
                 </p>
-                <br>
-                <p><strong>Created by:</strong> [Your Name Here]</p>
-                <p><strong>Institution:</strong> Technological University of the Philippines - Taguig</p>
+                <hr style="border: 0; height: 1px; background: var(--glass-border); margin: 25px 0;">
+                <div style="display: grid; gap: 10px;">
+                    <p><i class="fas fa-user-graduate" style="color: var(--primary-color); width: 25px;"></i> <strong>Created by:</strong> [Ralph Snider Ordonez]</p>
+                    <p><i class="fas fa-university" style="color: var(--primary-color); width: 25px;"></i> <strong>Institution:</strong> Technological University of the Philippines - Taguig</p>
+                </div>
             `;
         }
     </script>
