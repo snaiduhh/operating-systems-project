@@ -347,6 +347,136 @@
             }
             .section-title { font-size: 2rem; }
         }
+        /* =========================================
+   RESPONSIVE DESIGN FOR ALL DEVICES
+========================================= */
+
+/* Large Tablets / iPads */
+@media (max-width: 1024px) {
+    .nav-container {
+        flex-direction: column;
+        padding: 10px;
+    }
+
+    .menu {
+        flex-wrap: wrap;
+        justify-content: center;
+    }
+
+    .menu-link {
+        padding: 1rem;
+        font-size: 0.9rem;
+    }
+
+    .section-title {
+        font-size: 2.2rem;
+        text-align: center;
+    }
+
+    .section-desc {
+        padding: 30px;
+        font-size: 1rem;
+    }
+
+    .dropdown {
+        min-width: 250px;
+    }
+}
+
+/* Tablets / Small iPads */
+@media (max-width: 768px) {
+    .logo {
+        font-size: 1.3rem;
+        text-align: center;
+    }
+
+    .menu {
+        flex-direction: column;
+        width: 100%;
+        align-items: center;
+    }
+
+    .menu-item {
+        width: 100%;
+        text-align: center;
+    }
+
+    .menu-link {
+        width: 100%;
+        padding: 14px;
+        border-bottom: 1px solid rgba(255,255,255,0.05);
+    }
+
+    .dropdown {
+        position: static;
+        width: 100%;
+        display: none;
+        opacity: 1;
+        visibility: visible;
+        transform: none;
+        border-radius: 0;
+        box-shadow: none;
+        background: rgba(0,0,0,0.2);
+    }
+
+    .menu-item:hover .dropdown {
+        display: block;
+    }
+
+    .section-title {
+        font-size: 1.8rem;
+    }
+
+    .section-desc {
+        padding: 25px;
+        font-size: 0.95rem;
+    }
+
+    .main-content {
+        padding: 30px 15px;
+    }
+}
+
+/* Mobile Phones */
+@media (max-width: 480px) {
+    .logo {
+        font-size: 1.1rem;
+        padding: 10px;
+    }
+
+    .logo span {
+        font-size: 0.55em !important;
+    }
+
+    .section-title {
+        font-size: 1.4rem;
+        line-height: 1.4;
+    }
+
+    .section-desc {
+        padding: 20px;
+        font-size: 0.9rem;
+        line-height: 1.6;
+    }
+
+    .menu-link {
+        font-size: 0.85rem;
+        padding: 12px;
+    }
+
+    .dropdown a {
+        font-size: 0.85rem;
+        padding: 12px 15px;
+    }
+
+    .video-wrapper {
+        border-radius: 12px;
+    }
+
+    .main-content {
+        padding: 20px 10px;
+    }
+}
     </style>
 </head>
 <body onload="showHome()"> 
